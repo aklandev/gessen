@@ -1,0 +1,11 @@
+.social-list {
+  &--light {
+    .social-list__link {
+      border-width: 1px;
+    }
+  }
+  &__link {
+    width: 2.3em;
+    height: 2.3em;
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-contact-page",
+      "blocks": {
+        "59b5137f-b1d5-4426-aa7c-ae845f2f3d02": {
+          "type": "richtext",
+          "settings": {
+            "heading": "",
+            "content": "<p>General Inquiries<br\/>info@studiogessen.com<\/p>"
+          }
+        },
+        "4eb99472-d25b-4f70-9d4b-50260d617f78": {
+          "type": "richtext",
+          "settings": {
+            "heading": "",
+            "content": "<p>Customer Service<br\/>orders@studiogessen.com<\/p>"
+          }
+        },
+        "b2ae7928-599f-4a35-bf4e-fb5efb15b3f8": {
+          "type": "social",
+          "disabled": true,
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "59b5137f-b1d5-4426-aa7c-ae845f2f3d02",
+        "4eb99472-d25b-4f70-9d4b-50260d617f78",
+        "b2ae7928-599f-4a35-bf4e-fb5efb15b3f8"
+      ],
+      "settings": {
+        "image": "shopify:\/\/shop_images\/Wave_Tumbler_1_1_e4f3579f-c932-4b63-ab7d-23a8fe7076c7.jpg",
+        "size": "large"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

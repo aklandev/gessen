@@ -1,0 +1,242 @@
+{% style %}
+  .header__logo svg {
+    width: {{ section.settings.logo_width_mobile }}px;
+  }
+  [data-header-logo] {
+    min-width: {{ section.settings.logo_width_mobile }}px;
+  }
+  @media (min-width: 767px) {
+    .header__logo svg {
+      width: {{ section.settings.logo_width_desktop }}px;
+    }
+    [data-header-logo] {
+      min-width: {{ section.settings.logo_width_desktop }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="container">
+  <div class="header__inner d-flex align-items-center justify-content-between">
+    <div class="header__logo d-flex events-all">
+      <a
+        href="{{ routes.root_url }}{% if request.page_type != 'index' %}#shop{% endif %}"
+        class="d-block position-relative"
+      >
+        {% if section.settings.logo != blank %}
+          {% if request.page_type == 'index' %}
+            <span class="d-block">
+              {{ section.settings.logo }}
+            </span>
+            <span
+              class="d-none position-absolute"
+              data-header-logo
+              data-width-mobile="{{ section.settings.logo_width_mobile }}"
+              data-width-desktop="{{ section.settings.logo_width_desktop }}"
+            >
+              {{ section.settings.logo }}
+            </span>
+          {% else %}
+            {{ section.settings.logo }}
+          {% endif %}
+        {% else %}
+          <span class="h2">{{ shop.name }}</span>
+        {% endif %}
+      </a>
+    </div>
+    <div class="header__buttons d-flex ml-auto events-all">
+      <div class="header__cart-wrapper position-relative z-stack{% if cart.item_count == 0 %} d-none{% endif %}">
+        <button
+          class="header__burger header__burger--cart btn--outline flex-center rounded-circle border-none z-stack-2 active-state"
+          data-header-toggle
+        >
+          <span class="position-relative w-100 h-100">
+            <span class="header__burger__line d-none position-absolute overflow-hidden transition-default"></span>
+            <span class="header__burger__line position-absolute overflow-hidden transition-default"></span>
+            <span class="header__burger__line position-absolute overflow-hidden transition-default"></span>
+            <span class="header__burger__line d-none position-absolute overflow-hidden transition-default"></span>
+
+            <span
+              class="header__burger__open absolute-center text-1 font-bold transition-default"
+              data-cart-bubble
+            >
+              {{- cart.item_count -}}
+            </span>
+          </span>
+        </button>
+
+        <div class="header__nav bg-light position-absolute overflow-hidden z-behind transition-long"></div>
+        <div class="header__nav--content position-absolute overflow-hidden z-behind transition-long">
+          <div class="d-flex flex-column align-items-start pl-1 pr-1 pt-1 pb-1 h-100">
+            <h5 class="font-bold">
+              Cart (<span class="cart__heading__bubble" data-cart-bubble>{{ cart.item_count }}</span>)
+            </h5>
+
+            {% render 'cart-drawer', section: section %}
+          </div>
+        </div>
+      </div>
+      <div class="position-relative z-stack" data-header-nav>
+        <button
+          class="header__burger header__burger--menu btn--outline flex-center rounded-circle border-none z-stack-2 active-state"
+          data-header-toggle
+        >
+          <span class="position-relative w-100 h-100">
+            <span class="header__burger__line position-absolute overflow-hidden"></span>
+            <span class="header__burger__line position-absolute overflow-hidden"></span>
+            <span class="header__burger__line position-absolute overflow-hidden"></span>
+            <span class="header__burger__line position-absolute overflow-hidden"></span>
+          </span>
+        </button>
+
+        <div class="header__nav bg-light position-absolute overflow-hidden z-behind transition-long"></div>
+        <div class="header__nav--content position-absolute overflow-hidden z-behind transition-long">
+          <div class="d-flex flex-column justify-content-start h-100 pl-1 pr-1 pt-1 pb-1">
+            <ul class="header__nav-ul list-unstyled" role="list">
+              {% for link in section.settings.menu.links %}
+                {%- liquid
+                  assign url = link.url
+                  assign slicedUrl = url | slice: 0, 2
+
+                  if slicedUrl == '/#' and request.page_type == 'index'
+                    assign url = url | remove: '/'
+                  endif
+                -%}
+                <li class="mb-1">
+                  <a href="{{ url }}" class="link d-block text-1.125 text-dark font-bold lh-120">{{ link.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+
+            {% if section.settings.show_social %}
+              <div class="mt-auto">
+                {% render 'social-list', class: 'social-list--light', spacing: 'mr-1 text-1' %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if section.settings.logo %}
+      "logo": {{ section.settings.logo | image_url: width: section.settings.logo.width | prepend: "https:" | json }},
+    {% endif %}
+    "sameAs": [
+      {{ settings.social_twitter_link | json }},
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_pinterest_link | json }},
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_tiktok_link | json }},
+      {{ settings.social_tumblr_link | json }},
+      {{ settings.social_snapchat_link | json }},
+      {{ settings.social_youtube_link | json }},
+      {{ settings.social_vimeo_link | json }}
+    ],
+    "url": {{ request.origin | append: page.url | json }}
+  }
+</script>
+
+{%- if request.page_type == 'index' -%}
+  {% assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "tag": "header",
+  "class": "header pt-1 pb-1 position-sticky events-none",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo settings"
+    },
+    {
+      "type": "text",
+      "id": "logo",
+      "label": "Vector image SVG code",
+      "info": "Add SVG code starting with <svg..."
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "unit": "px",
+      "default": 160,
+      "label": "Width on mobile"
+    },
+    {
+      "type": "range",
+      "id": "logo_width_desktop",
+      "min": 100,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 210,
+      "label": "Width on desktop"
+    },
+    {
+      "type": "header",
+      "content": "Navigation settings"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social list"
+    },
+    {
+      "type": "header",
+      "content": "Cart settings"
+    },
+    {
+      "type": "paragraph",
+      "content": "Links under 'Check out' button"
+    },
+    {
+      "type": "url",
+      "id": "footer_link_1_url",
+      "label": "Link #1 URL"
+    },
+    {
+      "type": "text",
+      "id": "footer_link_1_label",
+      "label": "Link #1 Label"
+    },
+    {
+      "type": "url",
+      "id": "footer_link_2_url",
+      "label": "Link #2 URL"
+    },
+    {
+      "type": "text",
+      "id": "footer_link_2_label",
+      "label": "Link #2 Label"
+    }
+  ]
+}
+{% endschema %}

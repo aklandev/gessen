@@ -1,0 +1,30 @@
+.card-product {
+  height: 100%;
+  &__media {
+    @include media-breakpoint-down(sm) {
+      border-color: transparent;
+    }
+
+    img {
+      transition: 0.3s;
+      + img {
+        opacity: 0;
+      }
+    }
+  }
+  @media (hover: hover) {
+    &:hover {
+      img + img {
+        opacity: 1;
+      }
+    }
+  }
+  &__meta {
+    &__separator {
+      &:first-child,
+      &:last-child {
+        display: none;
+      }
+    }
+  }
+}

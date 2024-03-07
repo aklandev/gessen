@@ -1,0 +1,27 @@
+.form {
+  &__input {
+    padding: 14px 4rem 15px 0.75rem;
+    border-radius: 100px;
+    @include media-breakpoint-up(md) {
+      padding-left: calc(1.5rem - 2px);
+    }
+    &::placeholder {
+      font-family: inherit;
+      font-size: inherit;
+      color: rgba(var(--color-primary), 0.4);
+    }
+    &:focus-visible {
+      outline: rgb(var(--color-dark));
+    }
+  }
+  &__submit {
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+// .safari {
+//   .form__submit {
+//     top: 2px;
+//   }
+// }

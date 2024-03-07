@@ -1,0 +1,8 @@
+$values:  "100", "110", "120", "130", "150";
+$percent: "%";
+
+@each $value in $values {
+  .lh-#{$value} {
+    line-height: #{$value + $percent} !important;
+  }
+}
